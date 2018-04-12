@@ -1,0 +1,40 @@
+import java.awt.*;
+import java.applet.*;
+import java.util.*;
+public class WorldTime extends Applet implements Runnable{
+	private Date toDay = new Date();
+	private Thread th = null;
+	public void start()
+	{
+		if(th==null)
+		{
+			th= new Thread( );
+			th.start();
+		}
+	}
+	public void run()
+	{
+		while (true)
+		{
+			toDay = new Date();
+			repaint();
+			try
+			{
+				Thread.sleep(1000);
+				
+			}
+			catch(Exception e) {
+		
+			}
+		}
+	}
+	public void paint (Graphics g)
+	{
+		g.drawString("Tel-Aviv: "+toDay, 50, 100);
+		toDay.setTime(toDay.getTime()-7*3600*1000);
+		g.drawString("New-York: "+toDay, 50, 150);
+		toDay.setTime(toDay.getTime()+7*3600*1000);
+		g.drawString("Hanoi : "+toDay, 50, 200);
+	}
+	
+}

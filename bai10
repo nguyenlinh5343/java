@@ -1,0 +1,88 @@
+package test;
+import java.awt.*;
+import java.util.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.text.SimpleDataFormat;
+public class MutilClock extends JFrame implements ActionListener,Runnable
+{
+	//Nút để người dùng ấn và tạo ra tuyến mới 
+	JButton createClock = new JButton("new Clock");
+	//Dùng để hiển thị thời gian 
+	JLabel clock = new JLabel();
+	//Tuyến có tên t
+	Thread t; 
+	public MutilClock()
+	{
+		//Lấy tầng COntentPane của Jframe đe chứa các đối tượng hiển thị 
+		Container cont = this.getContentPane();
+		//lấy thời gian hiện tại 
+		Calendar cal = Calendar .getInstance();
+		//tHIẾT LẬP định dạng hiển thị thời gian giờ :phút :giây
+		SimpleDataFormat sdf = new SimpleDataFormat(HH:mm:ss);
+		//Hiển thị thời gian nhờ Jlabel clock,canh lề giữa
+		clock = new JLabel(sdf,format(cal.getTime()),JLabel.CENTER);
+		//Thiết lập kích thước và màu chữ
+		clock.setFont(new Font(clock.getFont().getName(),Font.PLAIN,40));
+		clock.setForeground(Color.RED);
+		//Đặt nút vào phía trreen cùng giao diện 
+		cont.add(createClock, "North");
+		//Đặt JLabel ở vùng trung tâm của giao diện 
+		cont.add(clock);
+		this.pack();
+		this.setVisible(true);
+		//Gắn ống nghe cho nút bấm
+		createClock.addActionListener(this);
+		//Tạos  một tuyến để hiển thị đồng hồ này 
+		Thread t= new Thread(this);
+		//Khởi động tuyesn và gọi hafm run
+		t.start();
+	}
+	//hàm tick() dùng đểcâp nhật lại thơi gian sau 1 giây 
+	public void tick()
+	{
+		try
+		{
+			//Lấy thời gian hiện tại và thiết lập định dạng hiển thị thời gian 
+		
+			Calendar cal= Calendar.getInstance();
+			SimpleDataFormat sdf= new SimpleDataFormat("HH:mm:ss");
+			//Cập nhật lại giá trị JLable ttuwsc là cập nhật lại giá trị thời gian 
+			clock.setText(sdf.format(cal.getTime()));
+			//Dừng 1000 mili giây tức là 1 giây trước khi cập nhật thời gian mới 
+			Thread.sleep(1000);
+			
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			
+		}
+	}
+		//Tuyế n hoạt động
+	public void run() {
+		//vòng lặp vô hạn
+		while(true)
+		{
+			//cập nhật lại thời gian 
+			tick();
+			
+		}
+		
+	}
+	//Tạo một tuyến mới tức đồng hồ mới khi ấn nút New oclock
+	public void actionPerformed(ActionEvent e)
+	{
+		//Tạo một tuyến biểu diễ đồng hồ 
+		Thread t = new Thread(new MutilClock());
+		t.start();
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		new MutilClock();
+		
+	}
+
+}
+
